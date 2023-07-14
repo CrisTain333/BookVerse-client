@@ -8,7 +8,7 @@ const Header = () => {
   // Replace javascript:void(0) paths with your paths
   const navigation = [
     { title: "All Books", path: "javascript:void(0)" },
-    { title: "Add New Book", path: "javascript:void(0)" },
+    { title: "Add New Book", path: "/add-book" },
   ];
 
   return (
