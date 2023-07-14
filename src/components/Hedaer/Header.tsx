@@ -103,7 +103,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/sing-up"
+                  to="/sign-up"
                   className="block py-3 px-4 font-medium text-lg text-center text-white bg-[#f62343] active:shadow-none rounded-md shadow md:inline"
                 >
                   Sign Up
