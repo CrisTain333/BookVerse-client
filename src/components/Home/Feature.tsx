@@ -1,5 +1,5 @@
-import React from "react";
-
+import { RxAvatar } from "react-icons/rx";
+import { AiFillTag } from "react-icons/ai";
 const posts = [
   {
     title: "The Great Gatsby",
@@ -230,7 +230,7 @@ const Feature = () => {
           <ul className="grid gap-x-8 gap-y-10 mt-16 sm:grid-cols-2 lg:grid-cols-4">
             {posts.map((items, key) => (
               <li
-                className="w-full mx-auto group sm:max-w-sm shadow-lg p-5 rounded"
+                className="w-full mx-auto group sm:max-w-sm shadow-lg p-5 rounded cursor-pointer"
                 key={key}
               >
                 <a>
@@ -238,15 +238,26 @@ const Feature = () => {
                     <span className="block text-indigo-600 text-base font-semibold">
                       {items.publicationDate}
                     </span>
-                    <h3 className="text-lg text-gray-800 duration-150 group-hover:text-[#f62343] font-semibold h-8">
-                      {items.title}
+                    <h3 className="text-lg text-gray-800 duration-150 group-hover:text-[#f62343] font-semibold h-10">
+                      {items.title?.slice(0, 30)} ...
                     </h3>
                     <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
-                      <span className="font-bold text-base">
-                        Author :{" "}
-                      </span>
-                      <p className="text-base font-semibold ml-2">
+                      <div className="text-base flex items-center">
+                        <RxAvatar />
+                        <span className="ml-1 font-semibold">
+                          Author :
+                        </span>
+                      </div>
+                      <p className="text-base font-semibold text-gray-500 ml-2">
                         {items.author}
+                      </p>
+                    </div>
+                    <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
+                      <div className="text-base flex items-center">
+                        <AiFillTag />
+                      </div>
+                      <p className="text-base font-semibold text-gray-500 ml-2">
+                        {items.genre}
                       </p>
                     </div>
                   </div>
