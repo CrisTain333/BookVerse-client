@@ -3,3 +3,8 @@ export type IRegisterData = {
   email: string;
   password: string;
 };
+
+export type ILoginCredential = {
+  email: string;
+  password: string;
+};

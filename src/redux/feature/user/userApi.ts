@@ -1,5 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api } from "../../api/api";
-import { IRegisterData } from "../../typs";
+import {
+  ILoginCredential,
+  IRegisterData,
+} from "../../typs";
 
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,7 +15,27 @@ export const userApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    loginUser: builder.mutation({
+      query: (credential: ILoginCredential) => ({
+        url: "/auth/login",
+        method: `POST`,
+        body: credential,
+      }),
+    }),
+
+    getUser: builder.query({
+      query: (token: any) => ({
+        url: "/auth/me",
+        headers: {
+          authorization: token,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useRegisterUserMutation } = userApi;
+export const {
+  useRegisterUserMutation,
+  useLoginUserMutation,
+  useGetUserQuery,
+} = userApi;
