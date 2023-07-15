@@ -1,19 +1,41 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { useState } from "react";
 import { bookGenre } from "../../constant/genre";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../redux/hooks/hook";
+import { useAddBooksMutation } from "../../redux/feature/book/bookApi";
+import { IBook } from "../../types";
 
 const AddBooks = () => {
-  const [formData, setFormData] = useState({
+  const { user, token } = useAppSelector(
+    (state) => state.auth
+  );
+  const [addBook, { isLoading }] = useAddBooksMutation();
+  const dispatch = useAppDispatch();
+  const [formData, setFormData] = useState<IBook>({
     title: "",
     author: "",
     genre: "Fiction",
-    publicationYear: "",
+    publicationDate: "",
+    addedBy: user?._id,
+    reviews: [],
   });
 
   console.log(formData);
 
-  const handleAddBook = () => {};
+  const handleAddBook = async () => {
+    const data = {
+      formData,
+      token,
+    };
+    const result = await addBook(data);
+    console.log(result);
+  };
 
   return (
     <div>
@@ -90,7 +112,7 @@ const AddBooks = () => {
                   <input
                     id="year"
                     type="date"
-                    value={formData?.publicationYear}
+                    value={formData?.publicationDate}
                     onChange={(e) =>
                       setFormData((prev: any) => {
                         return {

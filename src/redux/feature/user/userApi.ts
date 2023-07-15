@@ -22,20 +22,10 @@ export const userApi = api.injectEndpoints({
         body: credential,
       }),
     }),
-
-    getUser: builder.query({
-      query: (token: any) => ({
-        url: "/auth/me",
-        headers: {
-          authorization: token,
-        },
-      }),
-    }),
   }),
 });
 
 export const {
   useRegisterUserMutation,
   useLoginUserMutation,
-  useGetUserQuery,
 } = userApi;

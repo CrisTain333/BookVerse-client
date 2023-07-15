@@ -1,11 +1,18 @@
 import { useState } from "react";
 import Logo from "../../assets/icon.png";
 import { Link } from "react-router-dom";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../redux/hooks/hook";
+import { logout } from "../../redux/feature/user/userSlice";
 
 const Header = () => {
   const [state, setState] = useState(false);
   const [selected, setSelected] = useState("");
+  const { user } = useAppSelector((state) => state.auth);
   // Replace javascript:void(0) paths with your paths
+  const dispatch = useAppDispatch();
   const navigation = [
     { title: "All Books", path: "javascript:void(0)" },
     { title: "Add New Book", path: "/add-book" },
@@ -93,22 +100,35 @@ const Header = () => {
             })}
             <span className="hidden w-px h-6 bg-gray-300 md:block"></span>
             <div className="space-y-3 items-center gap-x-6 md:flex md:space-y-0">
-              <li>
-                <Link
-                  to="/login"
-                  className="block py-3 text-center text-gray-700 hover:text-[#f62343] border rounded-lg md:border-none text-lg"
-                >
-                  Log in
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/sign-up"
-                  className="block py-3 px-4 font-medium text-lg text-center text-white bg-[#f62343] active:shadow-none rounded-md shadow md:inline"
-                >
-                  Sign Up
-                </Link>
-              </li>
+              {user !== null ? (
+                <>
+                  <button
+                    className="block py-3 px-4 font-medium text-lg text-center text-white bg-[#f62343] active:shadow-none rounded-md shadow md:inline"
+                    onClick={() => dispatch(logout())}
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      to="/login"
+                      className="block py-3 text-center text-gray-700 hover:text-[#f62343] border rounded-lg md:border-none text-lg"
+                    >
+                      Log in
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/sign-up"
+                      className="block py-3 px-4 font-medium text-lg text-center text-white bg-[#f62343] active:shadow-none rounded-md shadow md:inline"
+                    >
+                      Sign Up
+                    </Link>
+                  </li>
+                </>
+              )}
             </div>
           </ul>
         </div>

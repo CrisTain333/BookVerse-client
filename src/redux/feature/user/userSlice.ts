@@ -7,6 +7,7 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { getUserProfile } from "../../../Api";
+import { IInitialState } from "../../typs";
 
 export const getUser = createAsyncThunk(
   "auth/getUser",
@@ -16,15 +17,17 @@ export const getUser = createAsyncThunk(
   }
 );
 
+const initialState: IInitialState = {
+  user: null,
+  token: localStorage.getItem("token") || "",
+  isLoading: true,
+  error: false,
+  errorMessage: "",
+};
+
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: null,
-    token: localStorage.getItem("token") || "",
-    isLoading: true,
-    error: false,
-    errorMessage: "",
-  },
+  initialState,
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;

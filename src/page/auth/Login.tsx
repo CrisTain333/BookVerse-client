@@ -7,16 +7,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/icon.png";
-import {
-  useGetUserQuery,
-  useLoginUserMutation,
-} from "../../redux/feature/user/userApi";
+import { useLoginUserMutation } from "../../redux/feature/user/userApi";
 import SmallLoader from "../../components/SmallLoader/SmallLoader";
 // import { toast } from "react-hot-toast/headless";
 import { toast } from "react-hot-toast";
 import { useAppDispatch } from "../../redux/hooks/hook";
 import {
-  setUser,
   setToken,
   getUser,
 } from "../../redux/feature/user/userSlice";
@@ -44,6 +40,7 @@ const Login = () => {
         getUser(responseData?.data?.accessToken)
       );
       dispatch(setToken(responseData?.data?.accessToken));
+      navigate("/");
     } else {
       toast.error(error?.data?.message);
     }
