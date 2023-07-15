@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { IBook } from "../../../types";
 import { api } from "../../api/api";
 
 export const bookApi = api.injectEndpoints({
@@ -20,6 +20,7 @@ export const bookApi = api.injectEndpoints({
         method: `POST`,
         body: data?.formData,
       }),
+      invalidatesTags: ["book"],
     }),
   }),
 });

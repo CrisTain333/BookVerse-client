@@ -1,22 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { bookGenre } from "../../constant/genre";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../redux/hooks/hook";
+import { useAppSelector } from "../../redux/hooks/hook";
 import { useAddBooksMutation } from "../../redux/feature/book/bookApi";
 import { IBook } from "../../types";
+import SmallLoader from "../SmallLoader/SmallLoader";
+import { toast } from "react-hot-toast";
 
 const AddBooks = () => {
   const { user, token } = useAppSelector(
     (state) => state.auth
   );
   const [addBook, { isLoading }] = useAddBooksMutation();
-  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<IBook>({
     title: "",
     author: "",
@@ -25,16 +25,51 @@ const AddBooks = () => {
     addedBy: user?._id,
     reviews: [],
   });
-
-  console.log(formData);
+  useEffect(() => {
+    setFormData({
+      title: "",
+      author: "",
+      genre: "Fiction",
+      publicationDate: "",
+      addedBy: user?._id,
+      reviews: [],
+    });
+  }, [user]);
 
   const handleAddBook = async () => {
+    if (formData.title === "") {
+      toast.error("Title is required");
+      return;
+    } else if (formData.author === "") {
+      toast.error("Author is required");
+      return;
+    } else if (formData.publicationDate === "") {
+      toast.error("Publication date  is required");
+      return;
+    }
+
     const data = {
       formData,
       token,
     };
-    const result = await addBook(data);
-    console.log(result);
+    const result: any = await addBook(data);
+    const { error, data: response } = result;
+
+    console.log(error);
+    console.log(response);
+    if (response?.statusCode === 200) {
+      toast.success(response?.message);
+      setFormData({
+        title: "",
+        author: "",
+        genre: "Fiction",
+        publicationDate: "",
+        addedBy: user?._id,
+        reviews: [],
+      });
+    } else {
+      toast.error(error?.data?.message);
+    }
   };
 
   return (
@@ -57,6 +92,7 @@ const AddBooks = () => {
                 <input
                   type="text"
                   name="title"
+                  required
                   onChange={(e) =>
                     setFormData((prev: any) => {
                       return {
@@ -75,6 +111,7 @@ const AddBooks = () => {
                 <input
                   type="text"
                   name="author"
+                  required
                   className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
                   onChange={(e) =>
                     setFormData((prev: any) => {
@@ -112,12 +149,13 @@ const AddBooks = () => {
                   <input
                     id="year"
                     type="date"
+                    required
                     value={formData?.publicationDate}
                     onChange={(e) =>
                       setFormData((prev: any) => {
                         return {
                           ...prev,
-                          publicationYear: e.target.value,
+                          publicationDate: e.target.value,
                         };
                       })
                     }
@@ -134,6 +172,7 @@ const AddBooks = () => {
                 <select
                   name="genre"
                   value={formData?.genre}
+                  required
                   onChange={(e) =>
                     setFormData((prev: any) => {
                       return {
@@ -164,7 +203,7 @@ const AddBooks = () => {
               >
                 <div className="inline-flex items-end">
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Add
+                    {isLoading ? <SmallLoader /> : <>Add</>}
                   </button>
                 </div>
               </div>
