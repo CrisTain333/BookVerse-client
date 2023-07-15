@@ -5,6 +5,7 @@ import ErrorPage from "../page/error/404";
 import Login from "../page/auth/Login";
 import SignUp from "../page/auth/SignUp";
 import AddBook from "../page/addBook";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -17,7 +18,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/add-book",
-        element: <AddBook />,
+        element: (
+          <PrivateRoute>
+            <AddBook />
+          </PrivateRoute>
+        ),
       },
     ],
   },

@@ -5,7 +5,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import logo from "../../assets/icon.png";
 import { useLoginUserMutation } from "../../redux/feature/user/userApi";
 import SmallLoader from "../../components/SmallLoader/SmallLoader";
@@ -19,7 +23,8 @@ import {
 const Login = () => {
   const dispatch = useAppDispatch();
   const [loginUser, { isLoading }] = useLoginUserMutation();
-  // const getUserQuery = useGetUserQuery(null);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const navigate = useNavigate();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -40,7 +45,7 @@ const Login = () => {
         getUser(responseData?.data?.accessToken)
       );
       dispatch(setToken(responseData?.data?.accessToken));
-      navigate("/");
+      navigate(from, { replace: true });
     } else {
       toast.error(error?.data?.message);
     }
