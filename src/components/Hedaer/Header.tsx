@@ -9,17 +9,16 @@ import { logout } from "../../redux/feature/user/userSlice";
 
 const Header = () => {
   const [state, setState] = useState(false);
-  const [selected, setSelected] = useState("");
   const { user } = useAppSelector((state) => state.auth);
   // Replace javascript:void(0) paths with your paths
   const dispatch = useAppDispatch();
   const navigation = [
-    { title: "All Books", path: "javascript:void(0)" },
+    { title: "All Books", path: "/all-book" },
     { title: "Add New Book", path: "/add-book" },
   ];
 
   return (
-    <nav className="bg-white border-b w-full md:static md:text-sm md:border-none">
+    <nav className="bg-white border-b w-full md:static md:text-sm md:border-none ">
       <div className="items-center px-4 mx-auto md:flex md:px-8">
         <div className="flex items-center justify-between py-3 md:py-5 md:block">
           <Link
@@ -82,12 +81,7 @@ const Header = () => {
               return (
                 <li
                   key={idx}
-                  className={` ${
-                    selected === item.title
-                      ? "text-[#f62343]"
-                      : "text-gray-700"
-                  }`}
-                  onClick={() => setSelected(item.title)}
+                  className={`text-gray-700`}
                 >
                   <Link
                     to={item.path}

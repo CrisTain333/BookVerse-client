@@ -6,6 +6,7 @@ import Login from "../page/auth/Login";
 import SignUp from "../page/auth/SignUp";
 import AddBook from "../page/addBook";
 import PrivateRoute from "./PrivateRoute";
+import AllBook from "../page/allBook";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
             <AddBook />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/all-book",
+        element: <AllBook />,
       },
     ],
   },

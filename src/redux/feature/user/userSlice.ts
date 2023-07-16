@@ -20,7 +20,7 @@ export const getUser = createAsyncThunk(
 const initialState: IInitialState = {
   user: null,
   token: localStorage.getItem("token") || "",
-  isLoading: true,
+  isLoading: false,
   error: false,
   errorMessage: "",
 };
@@ -45,6 +45,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
         state.error = false;
         state.user = null;
         state.errorMessage = "";
