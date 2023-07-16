@@ -66,10 +66,10 @@ const Feature = () => {
                       <a>
                         <div className="mt-3 space-y-2">
                           <span className="block text-indigo-600 text-base font-semibold">
-                            {items.publicationDate}
+                            {items?.publicationDate}
                           </span>
-                          <h3 className="text-lg text-gray-800 duration-150 group-hover:text-[#f62343] font-semibold h-10">
-                            {items.title?.slice(0, 30)} ...
+                          <h3 className="text-lg text-gray-800 duration-150 group-hover:text-[#f62343] font-semibold h-14">
+                            {items?.title}
                           </h3>
                           <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
                             <div className="text-base flex items-center">
@@ -79,7 +79,7 @@ const Feature = () => {
                               </span>
                             </div>
                             <p className="text-base font-semibold text-gray-500 ml-2">
-                              {items.author}
+                              {items?.author}
                             </p>
                           </div>
                           <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
@@ -87,7 +87,7 @@ const Feature = () => {
                               <AiFillTag />
                             </div>
                             <p className="text-base font-semibold text-gray-500 ml-2">
-                              {items.genre}
+                              {items?.genre}
                             </p>
                           </div>
                         </div>

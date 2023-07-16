@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -6,7 +7,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { bookGenre } from "../constant/genre";
 
-import { FcFilledFilter } from "react-icons/fc";
+import { FaFilter } from "react-icons/fa";
 import { useGetBookQuery } from "../redux/feature/book/bookApi";
 import { IBook } from "../types";
 import { RxAvatar } from "react-icons/rx";
@@ -24,6 +25,37 @@ import {
 import { useState } from "react";
 import React from "react";
 import { ThreeCircles } from "react-loader-spinner";
+import { Link } from "react-router-dom";
+
+export type INewBook = {
+  _id: string;
+  title: string;
+  author: string;
+  genre:
+    | "Fiction"
+    | "Fantasy"
+    | "Mystery"
+    | "Poetry"
+    | "Young Adult"
+    | "Non-Fiction"
+    | "Science Fiction"
+    | "Romance"
+    | "Thriller"
+    | "Historical Fiction"
+    | "Biography"
+    | "Self-Help"
+    | "Humor"
+    | "Drama"
+    | "Horror"
+    | "Adventure"
+    | "Action"
+    | "Classic"
+    | "Other";
+  publicationDate: string;
+  reviews: string[];
+  addedBy?: string;
+};
+
 const AllBook = () => {
   const {
     data: allBooks,
@@ -57,7 +89,7 @@ const AllBook = () => {
     let filteredBooks = allBooks?.data;
 
     if (searchQuery) {
-      filteredBooks = filteredBooks.filter(
+      filteredBooks = filteredBooks?.filter(
         (book: any) =>
           book.title
             .toLowerCase()
@@ -72,12 +104,12 @@ const AllBook = () => {
     }
 
     if (selectedGenres.length > 0) {
-      filteredBooks = filteredBooks.filter((book: any) =>
+      filteredBooks = filteredBooks?.filter((book: any) =>
         selectedGenres.includes(book.genre.toLowerCase())
       );
     }
     if (filteredPublicationYear) {
-      filteredBooks = filteredBooks.filter((book: any) =>
+      filteredBooks = filteredBooks?.filter((book: any) =>
         book.publicationDate.includes(
           filteredPublicationYear
         )
@@ -165,8 +197,8 @@ const AllBook = () => {
           <div className="sidebar w-[90%] sticky top-20">
             <div className="widget user_widget_search rounded-md shadow-md p-2">
               <h2 className="text-center flex items-center justify-center">
-                <span className="mr-1">
-                  <FcFilledFilter size={20} />
+                <span className="mr-1 text-[#f62343]">
+                  <FaFilter size={23} />
                 </span>
                 Filters
               </h2>
@@ -199,7 +231,7 @@ const AllBook = () => {
                   >
                     Category
                   </label>
-                  {bookGenre.map((category: any) => (
+                  {bookGenre?.map((category: any) => (
                     <div key={category}>
                       <label className="custom-control custom-checkbox">
                         <input
@@ -230,12 +262,12 @@ const AllBook = () => {
                   <select
                     value={filteredPublicationYear!}
                     onChange={handlePublicationYearFilter}
-                    className="w-[80%] border rounded-sm p-1 text-sm"
+                    className="w-[80%] border rounded-sm p-1 text-sm my-1"
                   >
                     <option value="">
                       All Publication Years
                     </option>
-                    {publicationYears.map((year: any) => (
+                    {publicationYears?.map((year: any) => (
                       <option
                         key={year}
                         value={year}
@@ -252,18 +284,18 @@ const AllBook = () => {
         <div className="col-span-9">
           <ul className="grid gap-x-8 gap-y-10  sm:grid-cols-2 lg:grid-cols-3">
             {searchResults?.map(
-              (items: IBook, key: number) => (
+              (items: INewBook, key: number) => (
                 <li
                   className="w-full mx-auto group sm:max-w-sm shadow-lg p-5 rounded cursor-pointer"
                   key={key}
                 >
-                  <a>
+                  <Link to={`/book-details/${items?._id}`}>
                     <div className="mt-3 space-y-2">
                       <span className="block text-indigo-600 text-base font-semibold">
-                        {items.publicationDate}
+                        {items?.publicationDate}
                       </span>
                       <h3 className="text-lg text-gray-800 duration-150 group-hover:text-[#f62343] font-semibold h-10">
-                        {items.title?.slice(0, 30)} ...
+                        {items?.title?.slice(0, 30)} ...
                       </h3>
                       <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
                         <div className="text-base flex items-center">
@@ -273,7 +305,7 @@ const AllBook = () => {
                           </span>
                         </div>
                         <p className="text-base font-semibold text-gray-500 ml-2">
-                          {items.author}
+                          {items?.author}
                         </p>
                       </div>
                       <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
@@ -281,11 +313,11 @@ const AllBook = () => {
                           <AiFillTag />
                         </div>
                         <p className="text-base font-semibold text-gray-500 ml-2">
-                          {items.genre}
+                          {items?.genre}
                         </p>
                       </div>
                     </div>
-                  </a>
+                  </Link>
                 </li>
               )
             )}

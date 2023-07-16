@@ -22,8 +22,16 @@ export const bookApi = api.injectEndpoints({
       }),
       invalidatesTags: ["book"],
     }),
+    getSingleBook: builder.query({
+      query: (id: string) => ({
+        url: `/books/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useGetBookQuery, useAddBooksMutation } =
-  bookApi;
+export const {
+  useGetBookQuery,
+  useAddBooksMutation,
+  useGetSingleBookQuery,
+} = bookApi;
