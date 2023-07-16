@@ -9,6 +9,7 @@ const bookSlice = createSlice({
   initialState: {
     searchQuery: "",
     searchResults: [],
+    filteredGenre: null,
   },
   reducers: {
     setSearchQuery: (
@@ -20,10 +21,16 @@ const bookSlice = createSlice({
     setSearchResults: (state, action) => {
       state.searchResults = action.payload;
     },
+    setFilteredGenre: (state, action) => {
+      state.filteredGenre = action.payload;
+    },
   },
 });
 
-export const { setSearchQuery, setSearchResults } =
-  bookSlice.actions;
+export const {
+  setSearchQuery,
+  setSearchResults,
+  setFilteredGenre,
+} = bookSlice.actions;
 
 export default bookSlice.reducer;

@@ -15,6 +15,7 @@ import {
   useAppSelector,
 } from "../redux/hooks/hook";
 import {
+  setFilteredGenre,
   setSearchQuery,
   setSearchResults,
 } from "../redux/feature/book/bookSlice";
@@ -28,9 +29,15 @@ const AllBook = () => {
     isError,
   } = useGetBookQuery(null);
   const [searchQuery, setSearchQueryLocal] = useState("");
+  const [selectedGenres, setSelectedGenres] = useState<
+    string[]
+  >([]);
   const dispatch = useAppDispatch();
-  const { searchQuery: stateSearch, searchResults } =
-    useAppSelector((state) => state.book);
+  const {
+    searchQuery: stateSearch,
+    searchResults,
+    filteredGenre,
+  } = useAppSelector((state) => state.book);
 
   const handleSearch = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -41,9 +48,11 @@ const AllBook = () => {
   };
   // console.log(allBooks);
   React.useEffect(() => {
+    let filteredBooks = allBooks?.data;
+
     if (searchQuery) {
-      const filteredBooks = allBooks?.data?.filter(
-        (book: IBook) =>
+      filteredBooks = filteredBooks.filter(
+        (book: any) =>
           book.title
             .toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
@@ -54,11 +63,39 @@ const AllBook = () => {
             .toLowerCase()
             .includes(searchQuery.toLowerCase())
       );
-      dispatch(setSearchResults(filteredBooks));
-    } else {
-      dispatch(setSearchResults(allBooks?.data));
     }
-  }, [searchQuery, allBooks, dispatch]);
+
+    if (selectedGenres.length > 0) {
+      filteredBooks = filteredBooks.filter((book: any) =>
+        selectedGenres.includes(book.genre.toLowerCase())
+      );
+    }
+
+    dispatch(setSearchResults(filteredBooks));
+  }, [searchQuery, selectedGenres, allBooks, dispatch]);
+
+  const handleGenreChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const genre = event.target.value.toLowerCase();
+    if (event.target.checked) {
+      setSelectedGenres((prevGenres) => [
+        ...prevGenres,
+        genre,
+      ]);
+    } else {
+      setSelectedGenres((prevGenres) =>
+        prevGenres.filter(
+          (prevGenre) => prevGenre !== genre
+        )
+      );
+    }
+    dispatch(
+      setFilteredGenre(
+        selectedGenres.length === 0 ? null : genre
+      )
+    );
+  };
 
   if (isLoading) {
     return (
@@ -94,7 +131,7 @@ const AllBook = () => {
   }
 
   return (
-    <div className="w-[80%] mx-auto">
+    <div className="w-full md:w-[95%] lg:w-[80%] mx-auto">
       <div className="grid grid-cols-12">
         <div className="col-span-3">
           <div className="sidebar w-[90%] sticky top-20">
@@ -140,12 +177,11 @@ const AllBook = () => {
                         <input
                           type="checkbox"
                           className="custom-control-input"
-                          // checked={selectedCategories.includes(
-                          //   category
-                          // )}
-                          // onChange={() =>
-                          //   handleCategoryChange(category)
-                          // }
+                          checked={selectedGenres.includes(
+                            category.toLowerCase()
+                          )}
+                          value={category}
+                          onChange={handleGenreChange}
                         />
                         <span className="custom-control-indicator"></span>
                         <span className="custom-control-description ml-1 my-1">

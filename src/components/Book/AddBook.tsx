@@ -55,8 +55,6 @@ const AddBooks = () => {
     const result: any = await addBook(data);
     const { error, data: response } = result;
 
-    console.log(error);
-    console.log(response);
     if (response?.statusCode === 200) {
       toast.success(response?.message);
       setFormData({
@@ -197,12 +195,12 @@ const AddBooks = () => {
                 </select>
               </div>
 
-              <div
-                className="md:col-span-5 text-right"
-                onClick={handleAddBook}
-              >
-                <div className="inline-flex items-end">
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <div className="md:col-span-5 text-right">
+                <div className="flex justify-end items-end">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={handleAddBook}
+                  >
                     {isLoading ? <SmallLoader /> : <>Add</>}
                   </button>
                 </div>
