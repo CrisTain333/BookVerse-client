@@ -4,19 +4,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { useParams } from "react-router-dom";
-import { useGetSingleBookQuery } from "../redux/feature/book/bookApi";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useGetSingleBookQuery,
+  useUpdateBookMutation,
+} from "../redux/feature/book/bookApi";
 import { bookGenre } from "../constant/genre";
 import SmallLoader from "../components/SmallLoader/SmallLoader";
 import { useEffect, useState } from "react";
 import { IBook } from "../types";
 import { ThreeCircles } from "react-loader-spinner";
+import { toast } from "react-hot-toast";
 
 const EditBook = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, isLoading } = useGetSingleBookQuery(
     id as string
   );
+
+  const [updateBook, { isLoading: updateLoader }] =
+    useUpdateBookMutation();
   const [formData, setFormData] = useState<IBook>({
     title: data?.data?.title,
     author: data?.data?.author,
@@ -35,6 +43,31 @@ const EditBook = () => {
       reviews: data?.data?.reviews,
     });
   }, [data]);
+
+  const updateBookHandler = async () => {
+    if (formData.title === "") {
+      toast.error("Title is required");
+      return;
+    } else if (formData.author === "") {
+      toast.error("Author is required");
+      return;
+    } else if (formData.publicationDate === "") {
+      toast.error("Publication date  is required");
+      return;
+    }
+    const data = {
+      formData,
+    };
+    const result: any = await updateBook({ id, data });
+    const { error, data: response } = result;
+    if (response?.statusCode === 200) {
+      toast.success(response?.message);
+
+      navigate(`/book-details/${id as string}`);
+    } else {
+      toast.error(error?.data?.message);
+    }
+  };
 
   if (isLoading) {
     <div className="h-[40vh] flex items-center justify-center">
@@ -175,9 +208,13 @@ const EditBook = () => {
             <div className="flex justify-center items-end">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                // onClick={handleAddBook}
+                onClick={updateBookHandler}
               >
-                {isLoading ? <SmallLoader /> : <>Update</>}
+                {updateLoader ? (
+                  <SmallLoader />
+                ) : (
+                  <>Update</>
+                )}
               </button>
             </div>
           </div>
