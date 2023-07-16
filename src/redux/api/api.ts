@@ -10,7 +10,7 @@ import { RootState } from "../store";
 // Define a service using a base URL and expected endpoints
 export const api = createApi({
   reducerPath: "api",
-  tagTypes: ["book"],
+  tagTypes: ["book", "singleBook"],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000/api/v1",
     prepareHeaders: (headers, { getState }) => {
