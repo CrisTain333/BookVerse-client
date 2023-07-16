@@ -8,6 +8,7 @@ import AddBook from "../page/addBook";
 import PrivateRoute from "./PrivateRoute";
 import AllBook from "../page/allBook";
 import BookDetails from "../page/bookDetails";
+import EditBook from "../page/editBook";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ export const router = createBrowserRouter([
       {
         path: "/book-details/:id",
         element: <BookDetails />,
+      },
+      {
+        path: "/edit-book/:id",
+        element: (
+          <PrivateRoute>
+            <EditBook />
+          </PrivateRoute>
+        ),
       },
     ],
   },

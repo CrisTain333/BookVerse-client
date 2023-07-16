@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -6,6 +7,8 @@ import { AiFillTag } from "react-icons/ai";
 import { useGetBookQuery } from "../../redux/feature/book/bookApi";
 import { IBook } from "../../types";
 import { ThreeCircles } from "react-loader-spinner";
+import { Link } from "react-router-dom";
+import { INewBook } from "../../page/allBook";
 
 const Feature = () => {
   const { data, isLoading, isError } =
@@ -58,12 +61,14 @@ const Feature = () => {
               <ul className="grid gap-x-8 gap-y-10 mt-16 sm:grid-cols-2 lg:grid-cols-4">
                 {data?.data
                   ?.slice(0, 10)
-                  ?.map((items: IBook, key: number) => (
+                  ?.map((items: INewBook, key: number) => (
                     <li
                       className="w-full mx-auto group sm:max-w-sm shadow-lg p-5 rounded cursor-pointer"
                       key={key}
                     >
-                      <a>
+                      <Link
+                        to={`/book-details/${items._id}`}
+                      >
                         <div className="mt-3 space-y-2">
                           <span className="block text-indigo-600 text-base font-semibold">
                             {items?.publicationDate}
@@ -91,7 +96,7 @@ const Feature = () => {
                             </p>
                           </div>
                         </div>
-                      </a>
+                      </Link>
                     </li>
                   ))}
               </ul>
