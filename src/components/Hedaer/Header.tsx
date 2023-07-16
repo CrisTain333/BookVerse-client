@@ -77,7 +77,7 @@ const Header = () => {
           }`}
         >
           <ul className="justify-end items-center space-y-6 md:flex md:space-x-6 md:space-y-0">
-            {navigation.map((item, idx) => {
+            {/* {navigation.map((item, idx) => {
               return (
                 <li
                   key={idx}
@@ -91,7 +91,28 @@ const Header = () => {
                   </Link>
                 </li>
               );
-            })}
+            })} */}
+
+            <li>
+              <Link
+                to="/all-book"
+                className="block text-xl"
+              >
+                All Books
+              </Link>
+            </li>
+            {user !== null && (
+              <>
+                <li>
+                  <Link
+                    to="/add-book"
+                    className="block text-xl"
+                  >
+                    Add New Book
+                  </Link>
+                </li>
+              </>
+            )}
             <span className="hidden w-px h-6 bg-gray-300 md:block"></span>
             <div className="space-y-3 items-center gap-x-6 md:flex md:space-y-0">
               {user !== null ? (

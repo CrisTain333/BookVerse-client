@@ -7,6 +7,7 @@ import {
 } from "./redux/hooks/hook";
 import { useEffect } from "react";
 import { getUser } from "./redux/feature/user/userSlice";
+import { loadWishlist } from "./redux/feature/wishlist/wishlistSlice";
 const App = () => {
   const { token } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
@@ -15,6 +16,7 @@ const App = () => {
       if (token) {
         await dispatch(getUser(token));
       }
+      dispatch(loadWishlist());
     };
     callMe();
   }, []);
