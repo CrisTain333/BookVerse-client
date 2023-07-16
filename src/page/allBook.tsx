@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -8,10 +10,89 @@ import { useGetBookQuery } from "../redux/feature/book/bookApi";
 import { IBook } from "../types";
 import { RxAvatar } from "react-icons/rx";
 import { AiFillTag } from "react-icons/ai";
-
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../redux/hooks/hook";
+import {
+  setSearchQuery,
+  setSearchResults,
+} from "../redux/feature/book/bookSlice";
+import { useState } from "react";
+import React from "react";
+import { ThreeCircles } from "react-loader-spinner";
 const AllBook = () => {
-  const { data, isLoading, isError } =
-    useGetBookQuery(null);
+  const {
+    data: allBooks,
+    isLoading,
+    isError,
+  } = useGetBookQuery(null);
+  const [searchQuery, setSearchQueryLocal] = useState("");
+  const dispatch = useAppDispatch();
+  const { searchQuery: stateSearch, searchResults } =
+    useAppSelector((state) => state.book);
+
+  const handleSearch = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const query = event.target.value;
+    setSearchQueryLocal(query);
+    dispatch(setSearchQuery(query));
+  };
+  // console.log(allBooks);
+  React.useEffect(() => {
+    if (searchQuery) {
+      const filteredBooks = allBooks?.data?.filter(
+        (book: IBook) =>
+          book.title
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          book.author
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          book.genre
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+      );
+      dispatch(setSearchResults(filteredBooks));
+    } else {
+      dispatch(setSearchResults(allBooks?.data));
+    }
+  }, [searchQuery, allBooks, dispatch]);
+
+  if (isLoading) {
+    return (
+      <>
+        <div className=" flex items-center justify-center h-[40vh]">
+          <ThreeCircles
+            height="120"
+            width="120"
+            color="#f62343"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel="three-circles-rotating"
+            outerCircleColor=""
+            innerCircleColor=""
+            middleCircleColor=""
+          />
+        </div>
+      </>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center h-[40vh]">
+        <p className="text-3xl font-semibold text-center text-red-600">
+          Sorry, we encountered an error while Loading the
+          data. <br /> Please refresh the page and try
+          again.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-[80%] mx-auto">
       <div className="grid grid-cols-12">
@@ -31,7 +112,7 @@ const AllBook = () => {
               >
                 <div className="form-group mb-1">
                   <label
-                    htmlFor="user_name"
+                    htmlFor="search"
                     className="mt-2 text-base font-semibold"
                   >
                     Books
@@ -41,11 +122,9 @@ const AllBook = () => {
                     type="text"
                     className="w-[80%] border rounded-sm p-1 text-sm"
                     id="user_name"
-                    // value={searchValue as string}
-                    // onChange={(e) =>
-                    //   setSearchValue(e.target.value)
-                    // }
-                    placeholder="e.g Search Books. . . ."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    placeholder="e.g Search Books..."
                   />
                 </div>
                 <div className="form-group mt-3">
@@ -55,12 +134,18 @@ const AllBook = () => {
                   >
                     Category
                   </label>
-                  {bookGenre.map((category) => (
+                  {bookGenre.map((category: any) => (
                     <div key={category}>
                       <label className="custom-control custom-checkbox">
                         <input
                           type="checkbox"
                           className="custom-control-input"
+                          // checked={selectedCategories.includes(
+                          //   category
+                          // )}
+                          // onChange={() =>
+                          //   handleCategoryChange(category)
+                          // }
                         />
                         <span className="custom-control-indicator"></span>
                         <span className="custom-control-description ml-1 my-1">
@@ -76,7 +161,7 @@ const AllBook = () => {
         </div>
         <div className="col-span-9">
           <ul className="grid gap-x-8 gap-y-10  sm:grid-cols-2 lg:grid-cols-3">
-            {data?.data?.map(
+            {searchResults?.map(
               (items: IBook, key: number) => (
                 <li
                   className="w-full mx-auto group sm:max-w-sm shadow-lg p-5 rounded cursor-pointer"

@@ -10,7 +10,6 @@ import { ThreeCircles } from "react-loader-spinner";
 const Feature = () => {
   const { data, isLoading, isError } =
     useGetBookQuery(null);
-  console.log(isError);
 
   if (isError) {
     return (

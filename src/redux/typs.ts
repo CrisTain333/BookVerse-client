@@ -20,3 +20,26 @@ export type IInitialState = {
   error: boolean;
   errorMessage: string;
 };
+
+export type IBookGenre = {
+  genre:
+    | "Fiction"
+    | "Fantasy"
+    | "Mystery"
+    | "Poetry"
+    | "Young Adult"
+    | "Non-Fiction"
+    | "Science Fiction"
+    | "Romance"
+    | "Thriller"
+    | "Historical Fiction"
+    | "Biography"
+    | "Self-Help"
+    | "Humor"
+    | "Drama"
+    | "Horror"
+    | "Adventure"
+    | "Action"
+    | "Classic"
+    | "Other";
+};
