@@ -12,7 +12,7 @@ export const api = createApi({
   reducerPath: "api",
   tagTypes: ["book", "singleBook"],
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8000/api/v1",
+    baseUrl: "https://book-verse.onrender.com/api/v1",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       headers.set("authorization", token);
