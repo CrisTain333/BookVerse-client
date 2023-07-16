@@ -5,10 +5,14 @@
 
 import { useParams } from "react-router-dom";
 import { useGetSingleBookQuery } from "../redux/feature/book/bookApi";
+import { AiFillTag } from "react-icons/ai";
+import { RxAvatar } from "react-icons/rx";
+import { useAppSelector } from "../redux/hooks/hook";
 
 const BookDetails = () => {
   const { id } = useParams();
   const { data } = useGetSingleBookQuery(id as string);
+  const { user } = useAppSelector((state) => state.auth);
 
   console.log(data?.data);
   return (
@@ -49,6 +53,44 @@ const BookDetails = () => {
             </svg>
             Delete
           </button>
+        </div>
+
+        <div>
+          <div className="mt-3 space-y-2">
+            <h3 className="text-5xl font-mono text-gray-800 duration-150 group-hover:text-[#f62343] font-semibold h-14">
+              {data?.data?.title}
+            </h3>
+            <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800 mt-10">
+              <div className="text-base flex items-center text-gray-500">
+                <RxAvatar size={25} />
+                <span className="ml-1 font-semibold text-2xl text-gray-500">
+                  Author :
+                </span>
+              </div>
+              <p className="text-xl text-slate-600 font-bold  ml-2">
+                {data?.data?.author}
+              </p>
+            </div>
+            <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
+              <div className="text-base flex items-center text-gray-500">
+                <AiFillTag size={25} />
+                <span className="ml-1 font-semibold text-xl text-gray-500">
+                  Genre :
+                </span>
+              </div>
+              <p className="text-base font-semibold text-gray-500 ml-2">
+                {data?.data?.genre}
+              </p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <span className="text-base font-semibold">
+                Published On :
+              </span>
+              <span className="block text-indigo-600 text-base font-semibold">
+                {data?.data?.publicationDate}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
