@@ -4,8 +4,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { toast } from "react-hot-toast";
 import { useAddReviewMutation } from "../../../redux/feature/book/bookApi";
 import { useAppSelector } from "../../../redux/hooks/hook";
+import { useNavigate } from "react-router-dom";
 
 const AddReviews = ({ id }: any) => {
   const [addReview, { isLoading }] = useAddReviewMutation();
@@ -13,6 +15,11 @@ const AddReviews = ({ id }: any) => {
 
   const handleAddReview = async (e: any) => {
     e.preventDefault();
+
+    if (user === null) {
+      toast.error("Please login to add review");
+      return;
+    }
 
     const message = e.target.message.value;
     const name = user?.name!;
@@ -42,7 +49,7 @@ const AddReviews = ({ id }: any) => {
             </h2>
             <div className="w-full md:w-full px-3 mb-2 mt-2">
               <textarea
-                className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white"
+                className="bg-white rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none "
                 name="message"
                 placeholder="Type Your Review"
                 required
@@ -53,8 +60,8 @@ const AddReviews = ({ id }: any) => {
               <div className="-mr-1">
                 <input
                   type="submit"
-                  className="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100"
-                  value="Add Review"
+                  className="bg-teal-500 text-white cursor-pointer font-medium py-1 px-4 border rounded-md tracking-wide mr-1 "
+                  value="Submit"
                 />
               </div>
             </div>

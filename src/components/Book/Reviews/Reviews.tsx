@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import AOS from "aos";
 import "aos/dist/aos.css";
+import moment from "moment"; // require
 const Reviews = ({ data }: any) => {
   console.log(data);
   AOS.init();
@@ -49,7 +51,10 @@ const Reviews = ({ data }: any) => {
                       {e?.name}
                     </p>
                     <p className="text-sm leading-none text-gray-500  font-semibold">
-                      14 July 2021
+                      {/* {moment()
+                        .startOf("hour")
+                        .fromNow(e?.createdAt)} */}
+                      {moment(e?.createdAt).calendar()}
                     </p>
                   </div>
                 </div>

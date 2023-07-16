@@ -15,7 +15,7 @@ ReactDOM.createRoot(
         position="top-right"
         containerStyle={{
           // Add space at the top
-          marginTop: "55px",
+          marginTop: "5rem",
         }}
         toastOptions={{
           duration: 4000,
