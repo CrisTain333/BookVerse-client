@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
@@ -7,15 +8,14 @@
 import { toast } from "react-hot-toast";
 import { useAddReviewMutation } from "../../../redux/feature/book/bookApi";
 import { useAppSelector } from "../../../redux/hooks/hook";
-import { useNavigate } from "react-router-dom";
 
 const AddReviews = ({ id }: any) => {
-  const [addReview, { isLoading }] = useAddReviewMutation();
+  const [addReview] = useAddReviewMutation();
   const { user } = useAppSelector((state) => state.auth);
 
   const handleAddReview = async (e: any) => {
     e.preventDefault();
-
+    const form = e.target;
     if (user === null) {
       toast.error("Please login to add review");
       return;
@@ -31,7 +31,16 @@ const AddReviews = ({ id }: any) => {
       },
     };
 
-    const response = await addReview({ data, id });
+    const result:any = await addReview({ data, id });
+    const { error, data: response } = result;
+
+    if (response?.statusCode === 200) {
+      toast.success(response?.message);
+      form.reset();
+    } else {
+      toast.error(error?.data?.message);
+    
+    }
     console.log(response);
   };
   return (

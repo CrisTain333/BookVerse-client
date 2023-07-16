@@ -11,11 +11,13 @@ import { useAddBooksMutation } from "../../redux/feature/book/bookApi";
 import { IBook } from "../../types";
 import SmallLoader from "../SmallLoader/SmallLoader";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AddBooks = () => {
   const { user, token } = useAppSelector(
     (state) => state.auth
   );
+  const navigate = useNavigate();
   const [addBook, { isLoading }] = useAddBooksMutation();
   const [formData, setFormData] = useState<IBook>({
     title: "",
@@ -65,6 +67,7 @@ const AddBooks = () => {
         addedBy: user?._id,
         reviews: [],
       });
+      navigate("/all-book");
     } else {
       toast.error(error?.data?.message);
     }
