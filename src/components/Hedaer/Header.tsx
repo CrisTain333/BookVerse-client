@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { useState } from "react";
 import Logo from "../../assets/icon.png";
 import { Link } from "react-router-dom";
@@ -12,10 +16,6 @@ const Header = () => {
   const { user } = useAppSelector((state) => state.auth);
   // Replace javascript:void(0) paths with your paths
   const dispatch = useAppDispatch();
-  const navigation = [
-    { title: "All Books", path: "/all-book" },
-    { title: "Add New Book", path: "/add-book" },
-  ];
 
   return (
     <nav className="bg-white border-b w-full md:static md:text-sm md:border-none ">
@@ -92,6 +92,14 @@ const Header = () => {
                 </li>
               );
             })} */}
+            <li>
+              <Link
+                to="/wish-list"
+                className="block text-xl"
+              >
+                Wishlist
+              </Link>
+            </li>
 
             <li>
               <Link
