@@ -84,7 +84,7 @@ const AllBook = () => {
   const { searchResults, filteredPublicationYear } =
     useAppSelector((state) => state.book);
 
-  const { books } = useAppSelector(
+  const { books, reading } = useAppSelector(
     (state) => state.wishlist
   );
 
@@ -297,6 +297,9 @@ const AllBook = () => {
             {searchResults?.map(
               (items: INewBook, key: number) => {
                 const isBookInWishlist = books.some(
+                  (book: any) => book._id === items._id
+                );
+                const isReading = reading.some(
                   (book: any) => book._id === items._id
                 );
                 return (

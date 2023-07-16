@@ -10,10 +10,14 @@ import { INewBook } from "../../../page/allBook";
 
 interface WishlistState {
   books: INewBook[];
+  reading: INewBook[];
+  finished: INewBook[];
 }
 
 const initialState: WishlistState = {
   books: [],
+  reading: [],
+  finished: [],
 };
 
 const wishlistSlice = createSlice({
@@ -36,36 +40,57 @@ const wishlistSlice = createSlice({
         JSON.stringify(state.books)
       );
     },
-    // removeBook: (state, action: PayloadAction<string>) => {
-    //   state.books = state.books.filter(
-    //     (book) => book.id !== action.payload
-    //   );
-    //   localStorage.setItem(
-    //     "wishlist",
-    //     JSON.stringify(state.books)
-    //   ); // Update wishlist in localStorage
-    // },
-    // markAsFinished: (
-    //   state,
-    //   action: PayloadAction<string>
-    // ) => {
-    //   const book = state.books.find(
-    //     (book) => book.id === action.payload
-    //   );
-    //   if (book) {
-    //     // Update book as finished reading
-    //     book.finishedReading = true;
-    //     localStorage.setItem(
-    //       "wishlist",
-    //       JSON.stringify(state.books)
-    //     ); // Update wishlist in localStorage
-    //   }
-    // },
+    removeBook: (state, action: PayloadAction<string>) => {
+      state.books = state.books.filter(
+        (book) => book._id !== action.payload
+      );
+      localStorage.setItem(
+        "wishlist",
+        JSON.stringify(state.books)
+      ); // Update wishlist in localStorage
+    },
+    addToReading: (
+      state,
+      action: PayloadAction<INewBook>
+    ) => {
+      const existingBookIndex = state.reading.findIndex(
+        (book) => book._id === action.payload._id
+      );
+      if (existingBookIndex === -1) {
+        state.reading.push(action.payload);
+      }
+      localStorage.setItem(
+        "reading",
+        JSON.stringify(state.reading)
+      );
+    },
+    removeFromReading: (
+      state,
+      action: PayloadAction<string>
+    ) => {
+      state.reading = state.reading.filter(
+        (book) => book._id !== action.payload
+      );
+      localStorage.setItem(
+        "reading",
+        JSON.stringify(state.reading)
+      );
+    },
+
     loadWishlist: (state) => {
       const storedWishlist =
         localStorage.getItem("wishlist");
       if (storedWishlist) {
         state.books = JSON.parse(storedWishlist);
+      }
+      const storedReading = localStorage.getItem("reading");
+      if (storedReading) {
+        state.reading = JSON.parse(storedReading);
+      }
+      const storedFinished =
+        localStorage.getItem("finished");
+      if (storedFinished) {
+        state.finished = JSON.parse(storedFinished);
       }
     },
   },
@@ -73,8 +98,10 @@ const wishlistSlice = createSlice({
 
 export const {
   addBook,
-  //   removeBook,
+  removeBook,
   //   markAsFinished,
+  removeFromReading,
   loadWishlist,
+  addToReading,
 } = wishlistSlice.actions;
 export default wishlistSlice.reducer;
