@@ -84,7 +84,7 @@ const AllBook = () => {
   const { searchResults, filteredPublicationYear } =
     useAppSelector((state) => state.book);
 
-  const { books, reading } = useAppSelector(
+  const { books } = useAppSelector(
     (state) => state.wishlist
   );
 
@@ -299,9 +299,7 @@ const AllBook = () => {
                 const isBookInWishlist = books.some(
                   (book: any) => book._id === items._id
                 );
-                const isReading = reading.some(
-                  (book: any) => book._id === items._id
-                );
+
                 return (
                   <li
                     className="w-full mx-auto group sm:max-w-sm shadow-lg p-5 rounded cursor-pointer"

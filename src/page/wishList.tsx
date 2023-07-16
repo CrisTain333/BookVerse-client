@@ -14,7 +14,6 @@ import {
   removeBook,
   removeFromReading,
 } from "../redux/feature/wishlist/wishlistSlice";
-import { toast } from "react-hot-toast";
 
 const WishList = () => {
   const { books, reading } = useAppSelector(

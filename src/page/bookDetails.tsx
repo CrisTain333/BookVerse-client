@@ -78,7 +78,7 @@ const BookDetails = () => {
     }).then(async (willDelete) => {
       if (willDelete) {
         const result: any = await deleteBook(id as string);
-        const { error, data: response } = result;
+        const {  data: response } = result;
         if (response?.statusCode === 200) {
           swal("Book has been deleted!", {
             icon: "success",
