@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -16,6 +17,7 @@ import {
 } from "../redux/hooks/hook";
 import {
   setFilteredGenre,
+  setFilteredPublicationYear,
   setSearchQuery,
   setSearchResults,
 } from "../redux/feature/book/bookSlice";
@@ -32,12 +34,16 @@ const AllBook = () => {
   const [selectedGenres, setSelectedGenres] = useState<
     string[]
   >([]);
+  const publicationYears = [
+    ...new Set(
+      allBooks?.data?.map((book: IBook) =>
+        book.publicationDate.slice(0, 4)
+      )
+    ),
+  ];
   const dispatch = useAppDispatch();
-  const {
-    searchQuery: stateSearch,
-    searchResults,
-    filteredGenre,
-  } = useAppSelector((state) => state.book);
+  const { searchResults, filteredPublicationYear } =
+    useAppSelector((state) => state.book);
 
   const handleSearch = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -70,9 +76,22 @@ const AllBook = () => {
         selectedGenres.includes(book.genre.toLowerCase())
       );
     }
+    if (filteredPublicationYear) {
+      filteredBooks = filteredBooks.filter((book: any) =>
+        book.publicationDate.includes(
+          filteredPublicationYear
+        )
+      );
+    }
 
     dispatch(setSearchResults(filteredBooks));
-  }, [searchQuery, selectedGenres, allBooks, dispatch]);
+  }, [
+    searchQuery,
+    selectedGenres,
+    allBooks,
+    dispatch,
+    filteredPublicationYear,
+  ]);
 
   const handleGenreChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -94,6 +113,15 @@ const AllBook = () => {
       setFilteredGenre(
         selectedGenres.length === 0 ? null : genre
       )
+    );
+  };
+
+  const handlePublicationYearFilter = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedPublicationYear = event.target.value;
+    dispatch(
+      setFilteredPublicationYear(selectedPublicationYear)
     );
   };
 
@@ -190,6 +218,32 @@ const AllBook = () => {
                       </label>
                     </div>
                   ))}
+                </div>
+                <div>
+                  <label
+                    htmlFor="user_gender"
+                    className="text-base font-semibold"
+                  >
+                    Publication Years
+                  </label>{" "}
+                  <br />
+                  <select
+                    value={filteredPublicationYear!}
+                    onChange={handlePublicationYearFilter}
+                    className="w-[80%] border rounded-sm p-1 text-sm"
+                  >
+                    <option value="">
+                      All Publication Years
+                    </option>
+                    {publicationYears.map((year: any) => (
+                      <option
+                        key={year}
+                        value={year}
+                      >
+                        {year}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </form>
             </div>

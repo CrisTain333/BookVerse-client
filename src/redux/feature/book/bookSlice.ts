@@ -10,6 +10,7 @@ const bookSlice = createSlice({
     searchQuery: "",
     searchResults: [],
     filteredGenre: null,
+    filteredPublicationYear: null,
   },
   reducers: {
     setSearchQuery: (
@@ -24,6 +25,9 @@ const bookSlice = createSlice({
     setFilteredGenre: (state, action) => {
       state.filteredGenre = action.payload;
     },
+    setFilteredPublicationYear: (state, action) => {
+      state.filteredPublicationYear = action.payload;
+    },
   },
 });
 
@@ -31,6 +35,7 @@ export const {
   setSearchQuery,
   setSearchResults,
   setFilteredGenre,
+  setFilteredPublicationYear,
 } = bookSlice.actions;
 
 export default bookSlice.reducer;
