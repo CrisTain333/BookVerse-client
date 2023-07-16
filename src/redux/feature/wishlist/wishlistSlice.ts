@@ -21,12 +21,20 @@ const wishlistSlice = createSlice({
   initialState,
   reducers: {
     addBook: (state, action: PayloadAction<INewBook>) => {
-      state.books.push(action.payload);
+      const existingBookIndex = state.books.findIndex(
+        (book) => book._id === action.payload._id
+      );
+      if (existingBookIndex !== -1) {
+        // Book already exists in the wishlist, remove it
+        state.books.splice(existingBookIndex, 1);
+      } else {
+        // Book doesn't exist in the wishlist, add it
+        state.books.push(action.payload);
+      }
       localStorage.setItem(
         "wishlist",
         JSON.stringify(state.books)
       );
-      // Store wishlist in localStorage
     },
     // removeBook: (state, action: PayloadAction<string>) => {
     //   state.books = state.books.filter(

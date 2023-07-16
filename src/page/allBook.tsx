@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
@@ -9,6 +10,10 @@ import { bookGenre } from "../constant/genre";
 
 import { FaFilter } from "react-icons/fa";
 import { useGetBookQuery } from "../redux/feature/book/bookApi";
+import {
+  BsBookmarkHeart,
+  BsBookmarkHeartFill,
+} from "react-icons/bs";
 import { IBook } from "../types";
 import { RxAvatar } from "react-icons/rx";
 import { AiFillTag } from "react-icons/ai";
@@ -26,6 +31,8 @@ import { useState } from "react";
 import React from "react";
 import { ThreeCircles } from "react-loader-spinner";
 import { Link } from "react-router-dom";
+import { addBook } from "../redux/feature/wishlist/wishlistSlice";
+import { toast } from "react-hot-toast";
 
 export type INewBook = {
   _id: string;
@@ -76,6 +83,10 @@ const AllBook = () => {
   const dispatch = useAppDispatch();
   const { searchResults, filteredPublicationYear } =
     useAppSelector((state) => state.book);
+
+  const { books } = useAppSelector(
+    (state) => state.wishlist
+  );
 
   const handleSearch = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -284,42 +295,80 @@ const AllBook = () => {
         <div className="col-span-9">
           <ul className="grid gap-x-8 gap-y-10  sm:grid-cols-2 lg:grid-cols-3">
             {searchResults?.map(
-              (items: INewBook, key: number) => (
-                <li
-                  className="w-full mx-auto group sm:max-w-sm shadow-lg p-5 rounded cursor-pointer"
-                  key={key}
-                >
-                  <Link to={`/book-details/${items?._id}`}>
+              (items: INewBook, key: number) => {
+                const isBookInWishlist = books.some(
+                  (book: any) => book._id === items._id
+                );
+                return (
+                  <li
+                    className="w-full mx-auto group sm:max-w-sm shadow-lg p-5 rounded cursor-pointer"
+                    key={key}
+                  >
                     <div className="mt-3 space-y-2">
-                      <span className="block text-indigo-600 text-base font-semibold">
-                        {items?.publicationDate}
-                      </span>
-                      <h3 className="text-lg text-gray-800 duration-150 group-hover:text-[#f62343] font-semibold h-10">
-                        {items?.title?.slice(0, 30)} ...
-                      </h3>
-                      <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
-                        <div className="text-base flex items-center">
-                          <RxAvatar />
-                          <span className="ml-1 font-semibold">
-                            Author :
-                          </span>
-                        </div>
-                        <p className="text-base font-semibold text-gray-500 ml-2">
-                          {items?.author}
-                        </p>
+                      <div className="flex items-center justify-between">
+                        <span className="block text-indigo-600 text-base font-semibold">
+                          {items?.publicationDate}
+                        </span>
+                        {isBookInWishlist ? (
+                          <>
+                            <span className="cursor-pointer text-red-600">
+                              <BsBookmarkHeartFill
+                                onClick={() => {
+                                  dispatch(addBook(items));
+                                  toast.success(
+                                    "removed from wishlist"
+                                  );
+                                }}
+                                size={22}
+                              />
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span
+                              className="cursor-pointer"
+                              onClick={() => {
+                                dispatch(addBook(items));
+                                toast.success(
+                                  "add to wishlist"
+                                );
+                              }}
+                            >
+                              <BsBookmarkHeart size={22} />
+                            </span>
+                          </>
+                        )}
                       </div>
-                      <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
-                        <div className="text-base flex items-center">
-                          <AiFillTag />
+                      <Link
+                        to={`/book-details/${items?._id}`}
+                      >
+                        <h3 className="text-lg text-gray-800 duration-150  font-semibold h-10">
+                          {items?.title?.slice(0, 30)} ...
+                        </h3>
+                        <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
+                          <div className="text-base flex items-center">
+                            <RxAvatar />
+                            <span className="ml-1 font-semibold">
+                              Author :
+                            </span>
+                          </div>
+                          <p className="text-base font-semibold text-gray-500 ml-2">
+                            {items?.author}
+                          </p>
                         </div>
-                        <p className="text-base font-semibold text-gray-500 ml-2">
-                          {items?.genre}
-                        </p>
-                      </div>
+                        <div className="text-gray-600 text-sm duration-150 flex items-center group-hover:text-gray-800">
+                          <div className="text-base flex items-center">
+                            <AiFillTag />
+                          </div>
+                          <p className="text-base font-semibold text-gray-500 ml-2">
+                            {items?.genre}
+                          </p>
+                        </div>
+                      </Link>
                     </div>
-                  </Link>
-                </li>
-              )
+                  </li>
+                );
+              }
             )}
           </ul>
         </div>

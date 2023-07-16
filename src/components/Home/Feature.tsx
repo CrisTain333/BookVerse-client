@@ -95,6 +95,14 @@ const Feature = () => {
                               <>
                                 <span className="cursor-pointer text-red-600">
                                   <BsBookmarkHeartFill
+                                    onClick={() => {
+                                      dispatch(
+                                        addBook(items)
+                                      );
+                                      toast.success(
+                                        "removed from wishlist"
+                                      );
+                                    }}
                                     size={22}
                                   />
                                 </span>
